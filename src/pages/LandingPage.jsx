@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldAlert, Code2, GitMerge, Lock, Zap, CheckCircle2, Shield, ChevronDown, GitBranch as GithubIcon, MessageCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../context/AuthContext';
 import SpotlightCard from '../components/SpotlightCard';
 import MagneticElement from '../components/MagneticElement';
 
 function LandingPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { user, loginAsGuest } = useAuth();
   const [openFaq, setOpenFaq] = useState(null);
 
   const faqs = [
@@ -55,7 +58,16 @@ function LandingPage() {
               <Link to="/scan" className="btn btn-primary" style={{ padding: '16px 32px', fontSize: '1.1rem', display: 'inline-block' }}>{t('landing.btnStart')}</Link>
             </MagneticElement>
             <MagneticElement magneticPull={0.4}>
-              <Link to="/dashboard" className="btn btn-secondary" style={{ padding: '16px 32px', fontSize: '1.1rem', display: 'inline-block' }}>{t('landing.btnDemo')}</Link>
+              <button 
+                onClick={() => {
+                  if (!user) loginAsGuest();
+                  navigate('/dashboard');
+                }} 
+                className="btn btn-secondary" 
+                style={{ padding: '16px 32px', fontSize: '1.1rem', display: 'inline-block', border: 'none', background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', cursor: 'pointer' }}
+              >
+                {t('landing.btnDemo')}
+              </button>
             </MagneticElement>
           </div>
         </motion.div>

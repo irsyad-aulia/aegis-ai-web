@@ -98,6 +98,17 @@ function ReportPage() {
         <title>Security Report {scanId ? `- ${scanId}` : ''} | Aegis AI</title>
         <meta name="description" content={`Detailed security audit report for ${fileName || 'your codebase'}. View vulnerabilities, severity levels, and AI-powered recommendations.`} />
       </Helmet>
+
+      {user?.isGuest && (
+        <div style={{ background: 'rgba(239, 160, 11, 0.1)', border: '1px solid var(--warning)', color: 'var(--warning)', padding: '16px', borderRadius: '12px', marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+          <div>
+            <strong>{t('dashboard.demoModeTitle', 'Mode Demo:')}</strong> {t('dashboard.demoModeDesc', 'Ini adalah laporan contoh. Anda dalam mode read-only.')}
+          </div>
+          <button onClick={() => navigate('/register')} className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.9rem' }}>
+            {t('dashboard.btnRegisterNow', 'Daftar Sekarang')}
+          </button>
+        </div>
+      )}
       
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <button 

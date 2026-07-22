@@ -136,6 +136,11 @@ function ScanPage() {
   const handleFilesSelected = (files) => {
     if (!files || files.length === 0) return;
 
+    if (user?.isGuest) {
+      toast.error('Pemindaian tidak tersedia di Mode Demo. Silakan daftar untuk menggunakan fitur ini.', { duration: 4000 });
+      return;
+    }
+
     // BLOKIR KERAS (HARD BLOCK) UNTUK MENCEGAH BROWSER FREEZE
     // Browser akan mati/lag jika mencoba memproses FileList dengan puluhan ribu item (misal: node_modules).
     if (files.length > 3000) {
@@ -246,6 +251,11 @@ function ScanPage() {
   };
 
   const handleGithubScan = async () => {
+    if (user?.isGuest) {
+      toast.error('Pemindaian tidak tersedia di Mode Demo. Silakan daftar untuk menggunakan fitur ini.', { duration: 4000 });
+      return;
+    }
+    
     if (!githubUrl || !githubUrl.includes('github.com')) {
       toast.error('URL GitHub tidak valid!');
       return;
@@ -320,6 +330,18 @@ function ScanPage() {
         <meta name="twitter:title" content="Code Scanner | Aegis AI" />
         <meta name="twitter:description" content="Scan your repository or local code directory instantly." />
       </Helmet>
+
+      {user?.isGuest && (
+        <div style={{ background: 'rgba(239, 160, 11, 0.1)', border: '1px solid var(--warning)', color: 'var(--warning)', padding: '16px', borderRadius: '12px', marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+          <div>
+            <strong>{t('dashboard.demoModeTitle', 'Mode Demo:')}</strong> {t('dashboard.demoModeDesc', 'Fitur pemindaian (scan) dinonaktifkan dalam mode ini.')}
+          </div>
+          <button onClick={() => navigate('/register')} className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.9rem' }}>
+            {t('dashboard.btnRegisterNow', 'Daftar Sekarang')}
+          </button>
+        </div>
+      )}
+
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <h1 style={{ fontSize: '2.5rem', marginBottom: '12px' }}>{t('scan.title')}</h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', marginBottom: '24px' }}>

@@ -21,6 +21,10 @@ app.use(passport.initialize());
 // Mount auth router
 app.use('/api/auth', auth.router);
 
+// Mount payment router
+const payment = require('./payment');
+app.use('/api/payment', payment.router);
+
 // Pastikan folder uploads ada
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {

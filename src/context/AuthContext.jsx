@@ -34,7 +34,7 @@ export function AuthProvider({ children }) {
   };
 
   const upgradeToPro = async () => {
-    if (!user || !token) return;
+    if (!user || !token || user.isGuest) return false;
     try {
       const res = await fetch(`${API_URL}/api/user/upgrade`, {
         method: 'POST',
@@ -53,8 +53,14 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const loginAsGuest = () => {
+    const guestUser = { id: 'guest', username: 'Guest Explorer', provider: 'guest', isGuest: true, isPro: false };
+    const guestToken = 'demo-token';
+    login(guestToken, guestUser);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, token, isAuthLoading, login, logout, upgradeToPro }}>
+    <AuthContext.Provider value={{ user, token, isAuthLoading, login, logout, upgradeToPro, loginAsGuest }}>
       {children}
     </AuthContext.Provider>
   );

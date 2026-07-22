@@ -14,7 +14,7 @@ import { API_URL } from '../config';
 function Dashboard() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { token, user } = useAuth();
+  const { token, user, logout } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -97,16 +97,27 @@ function Dashboard() {
   };
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="container" style={{ padding: '40px 20px' }}>
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="container" style={{ padding: '40px 24px', maxWidth: '1400px' }}>
       <Helmet>
         <title>Dashboard | Aegis AI</title>
-        <meta name="description" content="View your security score, monitored repositories, and vulnerability trends in real-time." />
       </Helmet>
-      
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px' }}>
+
+      {user?.isGuest && (
+        <div style={{ background: 'rgba(239, 160, 11, 0.1)', border: '1px solid var(--warning)', color: 'var(--warning)', padding: '16px', borderRadius: '12px', marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+          <div>
+            <strong>{t('dashboard.demoModeTitle', 'Mode Demo:')}</strong> {t('dashboard.demoModeDesc', 'Anda sedang menjelajah dalam mode read-only. Fitur pemindaian dan pengaturan dinonaktifkan.')}
+          </div>
+          <button onClick={() => { logout(); navigate('/register'); }} className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.9rem' }}>
+            {t('dashboard.btnRegisterNow', 'Daftar Sekarang')}
+          </button>
+        </div>
+      )}
+
+      {/* Header Section */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px', flexWrap: 'wrap', gap: '20px' }}>
         <div>
-          <h1 style={{ fontSize: '2.5rem', marginBottom: '8px' }}>{t('dashboard.title')}</h1>
-          <p style={{ color: 'var(--text-secondary)' }}>{t('dashboard.subtitle')}</p>
+          <h1 style={{ fontSize: '2rem', marginBottom: '8px' }}>{t('dashboard.title')}</h1>
+          <p style={{ color: 'var(--text-secondary)' }}>{t('dashboard.subtitle')} {user?.username}</p>
         </div>
         <div style={{ display: 'flex', gap: '16px' }}>
           <button className="btn btn-secondary" onClick={handleDownloadPDF}>

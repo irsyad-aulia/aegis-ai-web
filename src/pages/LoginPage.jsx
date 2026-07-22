@@ -10,7 +10,7 @@ function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { login, user } = useAuth();
+  const { login, user, loginAsGuest } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
@@ -156,6 +156,22 @@ function LoginPage() {
 
         <div style={{ marginTop: '24px', color: 'var(--text-secondary)' }}>
           {t('login.noAccount')} <Link to="/register" style={{ color: 'var(--accent-neon)' }}>{t('login.register')}</Link>
+        </div>
+        
+        <div style={{ marginTop: '16px' }}>
+          <button 
+            onClick={() => { loginAsGuest(); navigate('/dashboard'); }}
+            style={{ 
+              background: 'transparent', 
+              border: 'none', 
+              color: 'var(--text-secondary)', 
+              textDecoration: 'underline', 
+              cursor: 'pointer',
+              fontSize: '0.9rem'
+            }}
+          >
+            {t('landing.btnDemo', 'Atau Lihat Versi Demo')}
+          </button>
         </div>
       </SpotlightCard>
     </div>
