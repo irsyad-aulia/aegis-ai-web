@@ -21,7 +21,7 @@ const SCANNING_PHRASES = [
 function ScanPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { token, user, upgradeToPro } = useAuth();
+  const { token, user, upgradeToPro, logout } = useAuth();
   const [quotaInfo, setQuotaInfo] = useState(null);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [upgradeReason, setUpgradeReason] = useState('quota');

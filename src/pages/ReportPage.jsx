@@ -12,7 +12,7 @@ function ReportPage() {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   
   let reportData = location.state?.reportData;
   
