@@ -107,7 +107,7 @@ function Dashboard() {
           <div>
             <strong>{t('dashboard.demoModeTitle', 'Mode Demo:')}</strong> {t('dashboard.demoModeDesc', 'Anda sedang menjelajah dalam mode read-only. Fitur pemindaian dan pengaturan dinonaktifkan.')}
           </div>
-          <button onClick={() => { logout(); navigate('/register'); }} className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.9rem' }}>
+          <button onClick={() => { logout(); navigate('/login'); }} className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.9rem' }}>
             {t('dashboard.btnRegisterNow', 'Daftar Sekarang')}
           </button>
         </div>

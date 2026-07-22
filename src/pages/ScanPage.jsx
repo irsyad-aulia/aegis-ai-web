@@ -336,7 +336,7 @@ function ScanPage() {
           <div>
             <strong>{t('scan.demoModeTitle', 'Mode Demo:')}</strong> {t('scan.demoModeDesc', 'Fitur pemindaian (scan) dinonaktifkan dalam mode ini.')}
           </div>
-          <button onClick={() => navigate('/register')} className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.9rem' }}>
+          <button onClick={() => { logout(); navigate('/login'); }} className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.9rem' }}>
             {t('dashboard.btnRegisterNow', 'Daftar Sekarang')}
           </button>
         </div>
