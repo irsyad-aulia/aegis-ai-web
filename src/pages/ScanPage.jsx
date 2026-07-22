@@ -143,7 +143,14 @@ function ScanPage() {
       );
       return;
     }
-
+    // Pengecekan jika file adalah ZIP, pastikan ukurannya wajar (Misal: maksimal 10MB untuk demo)
+    if (files.length === 1 && files[0].name.endsWith('.zip')) {
+      const maxSize = 10 * 1024 * 1024; // 10MB
+      if (files[0].size > maxSize) {
+        toast.error(`Ukuran file ZIP terlalu besar (${(files[0].size / 1024 / 1024).toFixed(1)}MB). Batas maksimal adalah 10MB untuk menjaga stabilitas server demo.`, { duration: 6000 });
+        return;
+      }
+    }
     // LANGSUNG tampilkan UI Loading agar tidak ada kesan "Lag/Ngelek"
     setIsScanning(true);
     setUploadProgress(0);
@@ -224,7 +231,15 @@ function ScanPage() {
                 localStorage.setItem('aegisLastScan', JSON.stringify(data));
                 navigate('/report', { state: { reportData: data } });
               } else {
-                const errData = await res.json();
+                let errData;
+                const contentType = res.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                  errData = await res.json();
+                } else {
+                  // Jika server merespons dengan halaman error HTML (seperti 413 Payload Too Large atau 504 Gateway Timeout)
+                  errData = { error: `Server error: ${res.status} ${res.statusText}. Mungkin file Anda terlalu besar atau server mengalami timeout.` };
+                }
+                
                 if (errData.error === 'QUOTA_EXCEEDED') {
                   setUpgradeReason('quota');
                   setShowUpgradeModal(true);
@@ -234,7 +249,7 @@ function ScanPage() {
               }
             } catch (e) {
               setIsScanning(false);
-              toast.error('Gagal menghubungi Server Aegis Core.');
+              toast.error(e.message || 'Gagal menghubungi Server Aegis Core. Periksa koneksi atau ukuran file Anda.', { duration: 6000 });
             }
           }
         }, 150);
