@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import { API_URL } from '../config';
 
 const SCANNING_PHRASES = [
   "[SYS_OP] Memulai dekripsi struktur source code...",
@@ -36,7 +37,7 @@ function ScanPage() {
     if (!token) return;
     const fetchData = async () => {
       try {
-        const resStats = await fetch('http://localhost:3000/api/dashboard/stats', {
+        const resStats = await fetch(`${API_URL}/api/dashboard/stats`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (resStats.ok) {
@@ -44,7 +45,7 @@ function ScanPage() {
           setRecentScans(data.repos || []);
         }
         
-        const resQuota = await fetch('http://localhost:3000/api/user/quota', {
+        const resQuota = await fetch(`${API_URL}/api/user/quota`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (resQuota.ok) {
@@ -62,7 +63,7 @@ function ScanPage() {
     if (!token) return;
     try {
       const toastId = toast.loading('Mengambil laporan...');
-      const res = await fetch(`http://localhost:3000/api/scan/${scanId}`, {
+      const res = await fetch(`${API_URL}/api/scan/${scanId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       toast.dismiss(toastId);
@@ -212,7 +213,7 @@ function ScanPage() {
             setUploadProgress(100);
             
             try {
-              const res = await fetch('http://localhost:3000/api/scan', {
+              const res = await fetch(`${API_URL}/api/scan`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` },
                 body: formData,
@@ -268,7 +269,7 @@ function ScanPage() {
         }
       }, 300);
 
-      const res = await fetch('http://localhost:3000/api/scan-github', {
+      const res = await fetch(`${API_URL}/api/scan-github`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

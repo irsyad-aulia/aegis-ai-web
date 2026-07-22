@@ -26,3 +26,6 @@ dist-ssr
 # Uploads and server
 server/uploads
 uploads/
+
+.env
+server/.env

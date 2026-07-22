@@ -4,6 +4,7 @@ import { Shield, ChevronDown, Home, Bell, User, LogOut, Menu, X } from 'lucide-r
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 function Navbar() {
   const { t, i18n } = useTranslation();
@@ -30,7 +31,7 @@ function Navbar() {
     
     const fetchNotifs = async () => {
       try {
-        const res = await fetch('http://localhost:3000/api/notifications', {
+        const res = await fetch(`${API_URL}/api/notifications`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {
@@ -44,7 +45,7 @@ function Navbar() {
 
     const fetchQuota = async () => {
       try {
-        const res = await fetch('http://localhost:3000/api/user/quota', {
+        const res = await fetch(`${API_URL}/api/user/quota`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {
@@ -71,7 +72,7 @@ function Navbar() {
     setShowNotifMenu(!showNotifMenu);
     if (!showNotifMenu && unreadCount > 0) {
       try {
-        await fetch('http://localhost:3000/api/notifications/read', {
+        await fetch(`${API_URL}/api/notifications/read`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` }
         });

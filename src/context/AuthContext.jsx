@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { API_URL } from '../config';
 
 const AuthContext = createContext();
 
@@ -35,7 +36,7 @@ export function AuthProvider({ children }) {
   const upgradeToPro = async () => {
     if (!user || !token) return;
     try {
-      const res = await fetch('http://localhost:3000/api/user/upgrade', {
+      const res = await fetch(`${API_URL}/api/user/upgrade`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });

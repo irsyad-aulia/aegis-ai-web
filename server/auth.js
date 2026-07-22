@@ -23,7 +23,7 @@ if (process.env.GOOGLE_CLIENT_ID) {
       
       let user = await db.getQuery('SELECT * FROM users WHERE provider = ? AND provider_id = ?', ['google', profile.id]);
       if (!user) {
-        const result = await db.runQuery('INSERT INTO users (username, provider, provider_id, is_pro) VALUES (?, ?, ?, 0)', [username, 'google', profile.id]);
+        const result = await db.runQuery('INSERT INTO users (username, provider, provider_id, is_pro) VALUES (?, ?, ?, 0) RETURNING id', [username, 'google', profile.id]);
         user = { id: result.lastID, username, provider: 'google', is_pro: 0 };
       }
       return done(null, user);
@@ -44,7 +44,7 @@ if (process.env.GITHUB_CLIENT_ID) {
       const username = profile.username || profile.displayName || profile.id;
       let user = await db.getQuery('SELECT * FROM users WHERE provider = ? AND provider_id = ?', ['github', profile.id]);
       if (!user) {
-        const result = await db.runQuery('INSERT INTO users (username, provider, provider_id, is_pro) VALUES (?, ?, ?, 0)', [username, 'github', profile.id]);
+        const result = await db.runQuery('INSERT INTO users (username, provider, provider_id, is_pro) VALUES (?, ?, ?, 0) RETURNING id', [username, 'github', profile.id]);
         user = { id: result.lastID, username, provider: 'github', is_pro: 0 };
       }
       return done(null, user);
@@ -59,20 +59,20 @@ passport.deserializeUser((user, done) => done(null, user));
 
 // Rute Otentikasi Google
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-router.get('/google/callback', passport.authenticate('google', { session: false, failureRedirect: 'http://localhost:5173/login?error=google' }), (req, res) => {
+router.get('/google/callback', passport.authenticate('google', { session: false, failureRedirect: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/login?error=google` }), (req, res) => {
   const isPro = req.user.is_pro === 1;
   const token = jwt.sign({ id: req.user.id, username: req.user.username, isPro }, JWT_SECRET, { expiresIn: '7d' });
   const userData = encodeURIComponent(JSON.stringify({ id: req.user.id, username: req.user.username, isPro }));
-  res.redirect(`http://localhost:5173/login?token=${token}&user=${userData}`);
+  res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/login?token=${token}&user=${userData}`);
 });
 
 // Rute Otentikasi GitHub
 router.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
-router.get('/github/callback', passport.authenticate('github', { session: false, failureRedirect: 'http://localhost:5173/login?error=github' }), (req, res) => {
+router.get('/github/callback', passport.authenticate('github', { session: false, failureRedirect: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/login?error=github` }), (req, res) => {
   const isPro = req.user.is_pro === 1;
   const token = jwt.sign({ id: req.user.id, username: req.user.username, isPro }, JWT_SECRET, { expiresIn: '7d' });
   const userData = encodeURIComponent(JSON.stringify({ id: req.user.id, username: req.user.username, isPro }));
-  res.redirect(`http://localhost:5173/login?token=${token}&user=${userData}`);
+  res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/login?token=${token}&user=${userData}`);
 });
 
 
@@ -95,7 +95,7 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Simpan
-    const result = await db.runQuery('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword]);
+    const result = await db.runQuery('INSERT INTO users (username, password) VALUES (?, ?) RETURNING id', [username, hashedPassword]);
     
     // Auto-login (generate token)
     const token = jwt.sign({ id: result.lastID, username, isPro: false }, JWT_SECRET, { expiresIn: '7d' });

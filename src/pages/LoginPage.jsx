@@ -4,6 +4,7 @@ import { Shield, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import SpotlightCard from '../components/SpotlightCard';
 import { useTranslation } from 'react-i18next';
+import { API_URL } from '../config';
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -40,7 +41,7 @@ function LoginPage() {
     e.preventDefault();
     setError('');
     try {
-      const res = await fetch('http://localhost:3000/api/auth/login', {
+      const res = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
@@ -138,7 +139,7 @@ function LoginPage() {
           <button 
             className="btn btn-secondary" 
             style={{ width: '100%', padding: '12px', display: 'flex', justifyContent: 'center', gap: '12px' }}
-            onClick={() => window.location.href = 'http://localhost:3000/api/auth/google'}
+            onClick={() => window.location.href = `${API_URL}/api/auth/google`}
           >
             <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#EA4335" d="M24 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.82a5.75 5.75 0 0 1-2.5 3.77v3.13h4.02c2.35-2.17 3.68-5.38 3.68-9.14z"/><path fill="#34A853" d="M12 24c3.24 0 5.96-1.08 7.96-2.91l-4.02-3.13c-1.08.72-2.46 1.15-3.94 1.15-3.03 0-5.61-2.05-6.53-4.81H1.32v3.25A11.96 11.96 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.47 14.3a7.17 7.17 0 0 1 0-4.59V6.45H1.32a11.98 11.98 0 0 0 0 11.1l4.15-3.25z"/><path fill="#4285F4" d="M12 4.88c1.76 0 3.34.6 4.59 1.79l3.43-3.43C17.96 1.25 15.24 0 12 0 7.42 0 3.38 2.65 1.32 6.45l4.15 3.25c.92-2.76 3.5-4.82 6.53-4.82z"/></svg>
             {t('auth.google')}
@@ -146,7 +147,7 @@ function LoginPage() {
           <button 
             className="btn btn-secondary" 
             style={{ width: '100%', padding: '12px', display: 'flex', justifyContent: 'center', gap: '12px' }}
-            onClick={() => window.location.href = 'http://localhost:3000/api/auth/github'}
+            onClick={() => window.location.href = `${API_URL}/api/auth/github`}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
             {t('auth.github')}

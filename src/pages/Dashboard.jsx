@@ -9,6 +9,7 @@ import SpotlightCard from '../components/SpotlightCard';
 import { useAuth } from '../context/AuthContext';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
+import { API_URL } from '../config';
 
 function Dashboard() {
   const { t } = useTranslation();
@@ -27,7 +28,7 @@ function Dashboard() {
   const fetchDashboardData = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('http://localhost:3000/api/dashboard/stats', {
+      const res = await fetch(`${API_URL}/api/dashboard/stats`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
@@ -44,7 +45,7 @@ function Dashboard() {
   const handleViewLogs = async (scanId) => {
     if (!scanId) return;
     try {
-      const res = await fetch(`http://localhost:3000/api/scan/${scanId}`, {
+      const res = await fetch(`${API_URL}/api/scan/${scanId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {

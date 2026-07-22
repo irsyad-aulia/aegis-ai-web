@@ -6,6 +6,7 @@ import { Check, Copy, Server, Shield, GitBranch, MessageCircle, Code, Settings, 
 import toast from 'react-hot-toast';
 import SpotlightCard from '../components/SpotlightCard';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 function IntegrationPage() {
   const { t } = useTranslation();
@@ -25,7 +26,7 @@ function IntegrationPage() {
     if (!token) return;
     const fetchIntegrations = async () => {
       try {
-        const res = await fetch('http://localhost:3000/api/integrations', {
+        const res = await fetch(`${API_URL}/api/integrations`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {
@@ -60,7 +61,7 @@ function IntegrationPage() {
     }));
 
     try {
-      const res = await fetch('http://localhost:3000/api/integrations/toggle', {
+      const res = await fetch(`${API_URL}/api/integrations/toggle`, {
         method: 'POST',
         headers: { 
           'Authorization': `Bearer ${token}`,
