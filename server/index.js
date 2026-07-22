@@ -494,6 +494,12 @@ app.post('/api/integrations/toggle', auth.verifyToken, async (req, res) => {
   }
 });
 
+// Global Error Handler for debugging
+app.use((err, req, res, next) => {
+  console.error("Express Error:", err);
+  res.status(500).send("Express Error: " + err.message + "\nStack:\n" + err.stack);
+});
+
 app.listen(port, () => {
   console.log(`\n========================================`);
   console.log(`🛡️  AEGIS AI BACKEND RUNNING ON PORT ${port}`);
