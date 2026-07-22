@@ -58,7 +58,7 @@ passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 
 // Rute Otentikasi Google
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'], session: false }));
 router.get('/google/callback', passport.authenticate('google', { session: false, failureRedirect: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/login?error=google` }), (req, res) => {
   const isPro = req.user.is_pro === 1;
   const token = jwt.sign({ id: req.user.id, username: req.user.username, isPro }, JWT_SECRET, { expiresIn: '7d' });
@@ -67,7 +67,7 @@ router.get('/google/callback', passport.authenticate('google', { session: false,
 });
 
 // Rute Otentikasi GitHub
-router.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
+router.get('/github', passport.authenticate('github', { scope: ['user:email'], session: false }));
 router.get('/github/callback', passport.authenticate('github', { session: false, failureRedirect: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/login?error=github` }), (req, res) => {
   const isPro = req.user.is_pro === 1;
   const token = jwt.sign({ id: req.user.id, username: req.user.username, isPro }, JWT_SECRET, { expiresIn: '7d' });
