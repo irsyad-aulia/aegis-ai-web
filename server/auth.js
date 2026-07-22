@@ -11,48 +11,44 @@ const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-aegis-key';
 
 // Konfigurasi Passport Google
-if (process.env.GOOGLE_CLIENT_ID) {
-  passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK_URL || '/api/auth/google/callback'
-  }, async (accessToken, refreshToken, profile, done) => {
-    try {
-      const email = profile.emails && profile.emails[0] ? profile.emails[0].value : profile.id;
-      const username = profile.displayName || email.split('@')[0];
-      
-      let user = await db.getQuery('SELECT * FROM users WHERE provider = ? AND provider_id = ?', ['google', profile.id]);
-      if (!user) {
-        const result = await db.runQuery('INSERT INTO users (username, provider, provider_id, is_pro) VALUES (?, ?, ?, 0) RETURNING id', [username, 'google', profile.id]);
-        user = { id: result.lastID, username, provider: 'google', is_pro: 0 };
-      }
-      return done(null, user);
-    } catch (err) {
-      return done(err, null);
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID || 'MISSING_GOOGLE_ID',
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'MISSING_GOOGLE_SECRET',
+  callbackURL: process.env.GOOGLE_CALLBACK_URL || '/api/auth/google/callback'
+}, async (accessToken, refreshToken, profile, done) => {
+  try {
+    const email = profile.emails && profile.emails[0] ? profile.emails[0].value : profile.id;
+    const username = profile.displayName || email.split('@')[0];
+    
+    let user = await db.getQuery('SELECT * FROM users WHERE provider = ? AND provider_id = ?', ['google', profile.id]);
+    if (!user) {
+      const result = await db.runQuery('INSERT INTO users (username, provider, provider_id, is_pro) VALUES (?, ?, ?, 0) RETURNING id', [username, 'google', profile.id]);
+      user = { id: result.lastID, username, provider: 'google', is_pro: 0 };
     }
-  }));
-}
+    return done(null, user);
+  } catch (err) {
+    return done(err, null);
+  }
+}));
 
 // Konfigurasi Passport GitHub
-if (process.env.GITHUB_CLIENT_ID) {
-  passport.use(new GitHubStrategy({
-    clientID: process.env.GITHUB_CLIENT_ID,
-    clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: process.env.GITHUB_CALLBACK_URL || '/api/auth/github/callback'
-  }, async (accessToken, refreshToken, profile, done) => {
-    try {
-      const username = profile.username || profile.displayName || profile.id;
-      let user = await db.getQuery('SELECT * FROM users WHERE provider = ? AND provider_id = ?', ['github', profile.id]);
-      if (!user) {
-        const result = await db.runQuery('INSERT INTO users (username, provider, provider_id, is_pro) VALUES (?, ?, ?, 0) RETURNING id', [username, 'github', profile.id]);
-        user = { id: result.lastID, username, provider: 'github', is_pro: 0 };
-      }
-      return done(null, user);
-    } catch (err) {
-      return done(err, null);
+passport.use(new GitHubStrategy({
+  clientID: process.env.GITHUB_CLIENT_ID || 'MISSING_GITHUB_ID',
+  clientSecret: process.env.GITHUB_CLIENT_SECRET || 'MISSING_GITHUB_SECRET',
+  callbackURL: process.env.GITHUB_CALLBACK_URL || '/api/auth/github/callback'
+}, async (accessToken, refreshToken, profile, done) => {
+  try {
+    const username = profile.username || profile.displayName || profile.id;
+    let user = await db.getQuery('SELECT * FROM users WHERE provider = ? AND provider_id = ?', ['github', profile.id]);
+    if (!user) {
+      const result = await db.runQuery('INSERT INTO users (username, provider, provider_id, is_pro) VALUES (?, ?, ?, 0) RETURNING id', [username, 'github', profile.id]);
+      user = { id: result.lastID, username, provider: 'github', is_pro: 0 };
     }
-  }));
-}
+    return done(null, user);
+  } catch (err) {
+    return done(err, null);
+  }
+}));
 
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
