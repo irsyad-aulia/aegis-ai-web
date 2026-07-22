@@ -8,15 +8,6 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { API_URL } from '../config';
 
-const SCANNING_PHRASES = [
-  "[SYS_OP] Memulai dekripsi struktur source code...",
-  "[MODULE] Membangun Abstract Syntax Tree (AST)... 0x8FA4",
-  "[ENGINE] Memindai injeksi memori & SQL Payload...",
-  "[MEM_CHK] Menganalisis anomali Cross-Site Scripting...",
-  "[SEC_OPS] Menyelidiki Hardcoded Secrets & Token...",
-  "[KERNEL] Mencocokkan pola dengan Aegis ThreatDB...",
-  "[SYS_OP] Memfinalisasi matriks keamanan..."
-];
 
 function ScanPage() {
   const { t } = useTranslation();
@@ -109,10 +100,12 @@ function ScanPage() {
   // Efek untuk mengganti teks saat proses analisis (progress == 100)
   useEffect(() => {
     let interval;
-    if (isScanning && uploadProgress === 100) {
+    const scanPhrases = t('scan.phrases', { returnObjects: true });
+    
+    if (isScanning && scanPhrases && scanPhrases.length > 0) {
       interval = setInterval(() => {
-        setPhraseIndex((prev) => (prev + 1) % SCANNING_PHRASES.length);
-      }, 2000);
+        setPhraseIndex(prev => (prev + 1) % scanPhrases.length);
+      }, 1800);
     }
     return () => clearInterval(interval);
   }, [isScanning, uploadProgress]);
@@ -154,7 +147,7 @@ function ScanPage() {
     // LANGSUNG tampilkan UI Loading agar tidak ada kesan "Lag/Ngelek"
     setIsScanning(true);
     setUploadProgress(0);
-    setStatusText('[SYS_INIT] Mengalokasikan memori pemindai...');
+    setStatusText(t('scan.sysInit', '[SYS_INIT] Mengalokasikan memori pemindai...'));
 
     // Gunakan requestAnimationFrame ganda untuk memastikan UI benar-benar sudah di-render
     requestAnimationFrame(() => {
@@ -165,7 +158,7 @@ function ScanPage() {
         // Memecah pemrosesan file menjadi potongan kecil (Chunking) agar thread tidak terblokir
         const chunkSize = 2000;
         for (let i = 0; i < files.length; i += chunkSize) {
-          setStatusText(`[SYS_INIT] Memindai direktori... (${Math.min(i + chunkSize, files.length)} / ${files.length})`);
+          setStatusText(`${t('scan.sysInitScan', '[SYS_INIT] Memindai direktori...')} (${Math.min(i + chunkSize, files.length)} / ${files.length})`);
           
           const end = Math.min(i + chunkSize, files.length);
           for (let j = i; j < end; j++) {
@@ -192,7 +185,7 @@ function ScanPage() {
           return;
         }
         
-        setStatusText('[NET_TX] Menyiapkan Transmisi Jaringan...');
+        setStatusText(t('scan.netTxSetup', '[NET_TX] Menyiapkan Transmisi Jaringan...'));
         
         const formData = new FormData();
         
@@ -212,7 +205,7 @@ function ScanPage() {
             simulatedProgress += Math.floor(Math.random() * 15) + 5;
             if (simulatedProgress > 90) simulatedProgress = 90;
             setUploadProgress(simulatedProgress);
-            setStatusText(`[NET_TX] Mengunggah Data... ${simulatedProgress}%`);
+            setStatusText(`${t('scan.netTxUpload', '[NET_TX] Mengunggah Data...')} ${simulatedProgress}%`);
           } else {
             clearInterval(simInterval);
             setUploadProgress(100);
@@ -459,7 +452,7 @@ function ScanPage() {
                     exit={{ opacity: 0, y: -5 }}
                     style={{ fontSize: '1.1rem', color: 'var(--accent-neon)', margin: 0, fontFamily: 'monospace', letterSpacing: '0.5px' }}
                   >
-                    {SCANNING_PHRASES[phraseIndex]}
+                    {t('scan.phrases', { returnObjects: true })[phraseIndex] || ''}
                   </motion.h3>
                 </AnimatePresence>
               )}
