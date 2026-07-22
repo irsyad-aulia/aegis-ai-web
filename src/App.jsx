@@ -28,9 +28,12 @@ const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 // Private Route Wrapper
 const PrivateRoute = ({ children }) => {
-  const { user, isAuthLoading } = useAuth();
-  if (isAuthLoading) return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>;
-  return user ? children : <Navigate to="/login" />;
+  // const { user, isAuthLoading } = useAuth();
+  // if (isAuthLoading) return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>;
+  // return user ? children : <Navigate to="/login" />;
+  
+  // Temporary bypass for login
+  return children;
 };
 
 // Error Boundary untuk menangkap crash (layar putih)
