@@ -42,6 +42,9 @@ const resources = {
       },
       "dashboard": {
         "title": "Security Dashboard",
+        "demoModeTitle": "Demo Mode:",
+        "demoModeDesc": "You are browsing in read-only mode. Scanning and settings are disabled.",
+        "btnRegisterNow": "Register Now",
         "subtitle": "Welcome back, security looks good today.",
         "btnSync": "Sync Repositories",
         "scoreTitle": "Overall Security Score",
@@ -71,6 +74,8 @@ const resources = {
       },
       "scan": {
         "title": "Code Scanner",
+        "demoModeTitle": "Demo Mode:",
+        "demoModeDesc": "Scanning features are disabled in this mode.",
         "subtitle": "Scan your repository or local code directory instantly. Aegis AI detects SQL injections, XSS, and hardcoded secrets within seconds.",
         "dropTitle": "Drag & Drop your code here",
         "dropDesc": "or click to select your files manually",
@@ -96,6 +101,8 @@ const resources = {
       },
       "report": {
         "title": "Code Analysis Report",
+        "demoModeTitle": "Demo Mode:",
+        "demoModeDesc": "This is a sample report. You are in read-only mode.",
         "back": "Back",
         "downloadPdf": "Download PDF",
         "score": "Security Score",
@@ -225,6 +232,9 @@ const resources = {
       },
       "dashboard": {
         "title": "Panel de Seguridad",
+        "demoModeTitle": "Modo Demo:",
+        "demoModeDesc": "Estás navegando en modo de solo lectura. El escaneo y la configuración están deshabilitados.",
+        "btnRegisterNow": "Regístrate Ahora",
         "subtitle": "Bienvenido de nuevo, la seguridad se ve bien hoy.",
         "btnSync": "Sincronizar Repositorios",
         "scoreTitle": "Puntuación de Seguridad",
@@ -259,6 +269,8 @@ const resources = {
       },
       "scan": {
         "title": "Escáner de Código",
+        "demoModeTitle": "Modo Demo:",
+        "demoModeDesc": "Las funciones de escaneo están deshabilitadas en este modo.",
         "subtitle": "Escanea tu repositorio o directorio local al instante. Aegis AI detecta inyecciones SQL, XSS y secretos codificados en segundos.",
         "dropTitle": "Arrastra tu código aquí",
         "dropDesc": "o haz clic para seleccionar manualmente",
@@ -284,6 +296,8 @@ const resources = {
       },
       "report": {
         "title": "Informe de Análisis de Código",
+        "demoModeTitle": "Modo Demo:",
+        "demoModeDesc": "Este es un informe de muestra. Estás en modo de solo lectura.",
         "back": "Volver",
         "downloadPdf": "Descargar PDF",
         "score": "Puntuación",
@@ -413,6 +427,9 @@ const resources = {
       },
       "dashboard": {
         "title": "Dasbor Keamanan",
+        "demoModeTitle": "Mode Demo:",
+        "demoModeDesc": "Anda sedang menjelajah dalam mode read-only. Fitur pemindaian dan pengaturan dinonaktifkan.",
+        "btnRegisterNow": "Daftar Sekarang",
         "subtitle": "Selamat datang kembali, skor keamanan Anda terlihat baik hari ini.",
         "btnSync": "Sinkronkan Repos",
         "scoreTitle": "Skor Keamanan Total",
@@ -447,6 +464,8 @@ const resources = {
       },
       "scan": {
         "title": "Pemindai Kode (Aegis AI)",
+        "demoModeTitle": "Mode Demo:",
+        "demoModeDesc": "Fitur pemindaian (scan) dinonaktifkan dalam mode ini.",
         "subtitle": "Pindai repositori atau folder kode lokal Anda secara instan. Aegis AI mendeteksi SQL Injection, XSS, dan kunci rahasia dalam hitungan detik.",
         "dropTitle": "Seret & Lepas arsip Anda di sini",
         "dropDesc": "atau klik untuk memilih file secara manual",
@@ -472,6 +491,8 @@ const resources = {
       },
       "report": {
         "title": "Laporan Analisis Kode",
+        "demoModeTitle": "Mode Demo:",
+        "demoModeDesc": "Ini adalah laporan contoh. Anda dalam mode read-only.",
         "back": "Kembali",
         "downloadPdf": "Unduh PDF",
         "score": "Skor Keselamatan",
@@ -601,6 +622,9 @@ const resources = {
       },
       "dashboard": {
         "title": "セキュリティダッシュボード",
+        "demoModeTitle": "デモモード：",
+        "demoModeDesc": "読み取り専用モードでブラウジングしています。スキャンと設定は無効になっています。",
+        "btnRegisterNow": "今すぐ登録",
         "subtitle": "お帰りなさい、今日のセキュリティは良好です。",
         "btnSync": "リポジトリを同期",
         "scoreTitle": "総合セキュリティスコア",
@@ -635,6 +659,8 @@ const resources = {
       },
       "scan": {
         "title": "コードスキャナー",
+        "demoModeTitle": "デモモード：",
+        "demoModeDesc": "このモードではスキャン機能が無効になっています。",
         "subtitle": "リポジトリまたはローカルコードディレクトリを即座にスキャンします。",
         "dropTitle": "ここにコードをドラッグ＆ドロップ",
         "dropDesc": "またはクリックしてファイルを手動で選択",
@@ -660,6 +686,8 @@ const resources = {
       },
       "report": {
         "title": "コード分析レポート",
+        "demoModeTitle": "デモモード：",
+        "demoModeDesc": "これはサンプルレポートです。読み取り専用モードです。",
         "back": "戻る",
         "downloadPdf": "PDFをダウンロード",
         "score": "セキュリティスコア",

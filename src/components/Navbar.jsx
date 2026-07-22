@@ -244,14 +244,34 @@ function Navbar() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center', 
                   fontWeight: '700', fontSize: '1rem',
                   boxShadow: '0 0 15px rgba(124, 58, 237, 0.3)',
-                  cursor: 'pointer',
                   border: '2px solid rgba(255,255,255,0.1)'
                 }}
-                onClick={handleLogout}
-                title={`Logged in as ${user.username} (Click to Logout)`}
+                title={`Logged in as ${user.username}`}
               >
                 {user.username.charAt(0).toUpperCase()}
               </div>
+
+              {/* Logout Button */}
+              <button
+                onClick={handleLogout}
+                style={{ 
+                  background: 'rgba(239, 68, 68, 0.1)', 
+                  border: '1px solid rgba(239, 68, 68, 0.2)', 
+                  color: 'var(--danger)', 
+                  cursor: 'pointer', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  padding: '8px',
+                  borderRadius: '8px',
+                  transition: 'all 0.2s'
+                }}
+                onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)'; }}
+                onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)'; }}
+                title="Logout"
+              >
+                <LogOut size={18} />
+              </button>
 
             </div>
           ) : (
