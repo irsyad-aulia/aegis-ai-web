@@ -11,6 +11,7 @@ const passport = require('passport');
 const { analyzeCode } = require('./core/aegisAnalyzer');
 
 const app = express();
+app.set('trust proxy', 1); // Mempercayai proxy Render agar protokol (https) terbaca dengan benar
 const port = process.env.PORT || 3000;
 
 app.use(cors());
