@@ -195,6 +195,7 @@ function ScanPage() {
         setStatusText(t('scan.netTxSetup', '[NET_TX] Menyiapkan Transmisi Jaringan...'));
         
         const formData = new FormData();
+        formData.append('language', i18n.language || 'en');
         
         // Chunking untuk formData append (ini juga memakan CPU tinggi jika ribuan file)
         for (let i = 0; i < filteredFiles.length; i += chunkSize) {

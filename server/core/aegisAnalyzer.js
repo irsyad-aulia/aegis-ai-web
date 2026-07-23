@@ -4,7 +4,7 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 /**
  * Aegis Core - Mesin AI Sesungguhnya (Powered by Google Gemini 1.5)
  */
-async function analyzeCode(files) {
+async function analyzeCode(files, lang = 'en') {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey || apiKey === 'TULIS_API_KEY_ANDA_DI_SINI') {
@@ -15,12 +15,17 @@ async function analyzeCode(files) {
     // Menggunakan model Gemini terbaru karena 1.5 sudah usang di endpoint saat ini
     const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
 
-    // Menyusun format prompt
-    let prompt = `Anda adalah seorang ahli Cybersecurity Auditor kelas dunia (Setara dengan tim merah elit / Offensive Security Engineer).
-Tugas Anda adalah melakukan audit statis (SAST) yang mendalam terhadap kode sumber berikut.
-Saya akan memberikan isi file-file dari suatu proyek. Analisis secara cermat dan temukan celah keamanan nyata seperti SQL Injection, XSS, Hardcoded Secrets, Insecure Cryptography, Path Traversal, dll.
+    const langMap = { 'en': 'English', 'id': 'Indonesian', 'ja': 'Japanese', 'es': 'Spanish' };
+    const targetLang = langMap[lang] || 'English';
 
-KODE SUMBER:
+    // Menyusun format prompt
+    let prompt = `You are a world-class Cybersecurity Auditor (equivalent to an Elite Red Team / Offensive Security Engineer).
+Your task is to perform a deep static analysis (SAST) on the following source code.
+I will provide the contents of files from a project. Carefully analyze and find real security vulnerabilities such as SQL Injection, XSS, Hardcoded Secrets, Insecure Cryptography, Path Traversal, etc.
+
+IMPORTANT: You MUST write the 'description' and 'recommendation' strictly in ${targetLang} language!
+
+SOURCE CODE:
 =========================================
 `;
 
@@ -44,9 +49,9 @@ Format JSON harus persis seperti ini:
       "type": "Jenis Kerentanan (misal: SQL Injection)",
       "severity": "critical|high|medium|low",
       "line": 0, // Perkiraan baris (berikan angka atau 0 jika sulit),
-      "codeSnippet": "Potongan kode yang bermasalah",
-      "description": "Penjelasan detail mengapa ini berbahaya",
-      "recommendation": "Saran perbaikan",
+      "codeSnippet": "The problematic code snippet",
+      "description": "Detailed explanation of why this is dangerous (IN ${targetLang})",
+      "recommendation": "How to fix it (IN ${targetLang})",
       "fixedCode": "Kode yang sudah diperbaiki"
     }
   ]
@@ -109,6 +114,7 @@ Jika kode sangat aman dan tidak ada celah, kembalikan JSON dengan array vulnerab
     console.log("[Aegis LLM Engine] Mengaktifkan Mode Fallback Offline (Mock Data) untuk demo...");
     
     // Fallback Mock Data jika API sedang down
+    const isEn = lang === 'en';
     return {
       scanId: `LLM-FALLBACK-${Date.now()}`,
       fileName: files.length === 1 ? files[0].name : `Kumpulan File (${files.length} File)`,
@@ -116,7 +122,9 @@ Jika kode sangat aman dan tidak ada celah, kembalikan JSON dengan array vulnerab
       overallScore: 45,
       status: 'critical',
       vulnerabilitiesFound: 2,
-      aiSummary: "Peringatan: Laporan ini di-generate menggunakan mesin Aegis Fallback karena server AI utama sedang kelebihan muatan. Ditemukan setidaknya 2 pola kerentanan yang cukup berisiko.",
+      aiSummary: isEn 
+        ? "Warning: This report was generated using the Aegis Fallback engine because the main AI server is overloaded or missing API keys. Found at least 2 risky vulnerability patterns."
+        : "Peringatan: Laporan ini di-generate menggunakan mesin Aegis Fallback karena server AI utama sedang kelebihan muatan atau API key belum diset. Ditemukan setidaknya 2 pola kerentanan yang cukup berisiko.",
       vulnerabilities: [
         {
           id: "VULN-FBK-01",
@@ -125,8 +133,12 @@ Jika kode sangat aman dan tidak ada celah, kembalikan JSON dengan array vulnerab
           severity: "critical",
           line: 12,
           codeSnippet: "const API_KEY = 'AKIAIOSFODNN7EXAMPLE';",
-          description: "Kunci rahasia API ditulis langsung (hardcoded) ke dalam repositori. Ini memungkinkan peretas yang memiliki akses ke kode sumber untuk menyalahgunakan layanan cloud Anda.",
-          recommendation: "Gunakan environment variables (.env) dan pastikan file tersebut masuk ke dalam .gitignore.",
+          description: isEn 
+            ? "API secret key is hardcoded directly into the repository. This allows attackers with access to the source code to abuse your cloud services."
+            : "Kunci rahasia API ditulis langsung (hardcoded) ke dalam repositori. Ini memungkinkan peretas yang memiliki akses ke kode sumber untuk menyalahgunakan layanan cloud Anda.",
+          recommendation: isEn 
+            ? "Use environment variables (.env) and ensure the file is included in .gitignore."
+            : "Gunakan environment variables (.env) dan pastikan file tersebut masuk ke dalam .gitignore.",
           fixedCode: "const API_KEY = process.env.CLOUD_API_KEY;"
         },
         {
@@ -136,8 +148,12 @@ Jika kode sangat aman dan tidak ada celah, kembalikan JSON dengan array vulnerab
           severity: "medium",
           line: 45,
           codeSnippet: "app.use(cors({ origin: '*' }));",
-          description: "Konfigurasi CORS mengizinkan permintaan dari semua domain (*). Ini membuat aplikasi rentan terhadap serangan CSRF jika ada endpoint yang mengubah data sensitif berdasarkan cookie.",
-          recommendation: "Batasi origin hanya pada domain front-end Anda yang sah.",
+          description: isEn 
+            ? "CORS configuration allows requests from all domains (*). This makes the application vulnerable to CSRF attacks if there are endpoints that modify sensitive data based on cookies."
+            : "Konfigurasi CORS mengizinkan permintaan dari semua domain (*). Ini membuat aplikasi rentan terhadap serangan CSRF jika ada endpoint yang mengubah data sensitif berdasarkan cookie.",
+          recommendation: isEn 
+            ? "Restrict origin to only your legitimate front-end domains."
+            : "Batasi origin hanya pada domain front-end Anda yang sah.",
           fixedCode: "app.use(cors({ origin: 'https://trusted-domain.com' }));"
         }
       ]
